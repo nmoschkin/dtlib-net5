@@ -422,13 +422,18 @@ Namespace Usb
                 If i >= 0 Then
                     v = BatchParse(hw.Substring(i), ":")
                     If v.Length > 1 Then
-                        If UShort.TryParse(v(1).Replace("_U", ""), Globalization.NumberStyles.AllowHexSpecifier, Globalization.CultureInfo.CurrentCulture.NumberFormat, CUShort(_HidPage)) Then
+
+                        Dim hp As UShort
+
+                        If UShort.TryParse(v(1).Replace("_U", ""), Globalization.NumberStyles.AllowHexSpecifier, Globalization.CultureInfo.CurrentCulture.NumberFormat, hp) Then
+                            _HidPage = hp
 
                             If _HidPage > &HFF Then
                                 _HidPage = HidUsagePage.Reserved
 
                                 If v.Length > 2 Then
-                                    If UShort.TryParse(v(1).Replace("_U", ""), Globalization.NumberStyles.AllowHexSpecifier, Globalization.CultureInfo.CurrentCulture.NumberFormat, CUShort(_HidPage)) Then
+                                    If UShort.TryParse(v(1).Replace("_U", ""), Globalization.NumberStyles.AllowHexSpecifier, Globalization.CultureInfo.CurrentCulture.NumberFormat, hp) Then
+                                        _HidPage = hp
                                         If _HidPage > &HFF Then _HidPage = HidUsagePage.Reserved
                                     End If
                                 End If

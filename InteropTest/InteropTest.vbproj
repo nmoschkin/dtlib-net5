@@ -9,6 +9,7 @@
     <!--<StartupObject>Sub Main</StartupObject>-->
 	  <!-- Don't make ApplicationDefinition for me -->
 	  <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+	  <Platforms>AnyCPU;x64;x86</Platforms>
     </PropertyGroup>
 	<ItemGroup>
 	    <!-- This is my application definition - I should be able to call it whatever I want -->

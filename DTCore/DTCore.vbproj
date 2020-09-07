@@ -6,6 +6,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <RootNamespace>DataTools</RootNamespace>
     <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

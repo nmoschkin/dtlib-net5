@@ -9,6 +9,7 @@ Imports System.Runtime.InteropServices
 Imports System.Windows
 Imports DataTools.Interop.Usb
 Imports System.Windows.Controls
+Imports System.Threading
 
 Public Class CodeExplorer
     Private Declare Function HidD_GetFeature Lib "hid.dll" ( _
@@ -55,6 +56,8 @@ Public Class CodeExplorer
 
         Dim devs() As HidDeviceInfo = HidDevicesByUsage(HidUsagePage.PowerDevice1)
 
+        If devs Is Nothing Then Return
+
         For Each d In devs
             Me.Devices.Add(d)
         Next
@@ -87,6 +90,8 @@ Public Class CodeExplorer
         StartWatching(d)
     End Sub
 
+    Private cts As CancellationTokenSource
+
     Private Sub StartWatching(d As HidDeviceInfo)
 
         Dim h As IntPtr
@@ -104,8 +109,12 @@ Public Class CodeExplorer
             s.Add("")
         Next
 
+
+
         Dim th As New System.Threading.Thread( _
             Sub()
+
+                cts = New CancellationTokenSource()
 
                 h = OpenHid(d)
                 If CLng(h) <= 0 Then Return
@@ -133,22 +142,26 @@ Public Class CodeExplorer
 
                         System.Threading.Thread.Sleep(1000)
 
+                        If (cts Is Nothing OrElse cts.IsCancellationRequested) Then Exit Do
                     Loop
 
                     mm.Free()
                     CloseHid(h)
+                    cts = Nothing
                     Return
 
                 Catch tx As System.Threading.ThreadAbortException
 
                     mm.Free()
                     CloseHid(h)
+                    cts = Nothing
                     Return
 
                 Catch ex As Exception
 
                     mm.Free()
                     CloseHid(h)
+                    cts = Nothing
                     Return
 
                 End Try
@@ -167,8 +180,9 @@ Public Class CodeExplorer
 
     Private Sub StopWatching()
 
-        If _devThread IsNot Nothing Then
-            _devThread.Abort()
+        If _devThread IsNot Nothing AndAlso cts IsNot Nothing Then
+            cts.Cancel()
+
             ViewingArea.ItemsSource = Nothing
             _devThread = Nothing
         End If
