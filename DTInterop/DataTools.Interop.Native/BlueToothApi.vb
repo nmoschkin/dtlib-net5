@@ -2620,7 +2620,7 @@ Namespace Native
         Public Function _internalEnumBluetoothDevices() As BLUETOOTH_DEVICE_INFO()
             Dim bl As New List(Of BLUETOOTH_DEVICE_INFO)
 
-            Dim hDevice As IntPtr
+            'Dim hDevice As IntPtr
             Dim hRadio As IntPtr
             Dim hFind As IntPtr
 

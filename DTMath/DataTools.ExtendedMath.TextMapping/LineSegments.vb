@@ -4,7 +4,6 @@ Imports System.Drawing.Imaging
 Imports System.Windows
 Imports System.IO
 Imports System.Text
-Imports System.Windows.Forms
 Imports DataTools.Strings
 Imports DataTools.Memory
 Imports System.Runtime.InteropServices

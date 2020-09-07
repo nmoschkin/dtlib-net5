@@ -10,6 +10,8 @@
 '' Licensed Under the Microsoft Public License   
 '' ************************************************* ''
 
+#Disable Warning MSLIB0001 ' Type or member is obsolete
+
 Option Explicit On
 Option Strict Off
 Option Compare Binary
@@ -484,8 +486,8 @@ Namespace ByteOrderMark
             UTF1 = New BOM({CByte(&HF7), CByte(&H64), CByte(&H4C)}, "UTF1")
             UTFEBCDIC = New BOM({CByte(&HDD), CByte(&H73), CByte(&H66), CByte(&H73)}, "UTFEBCDIC")
             SCSU = New BOM({CByte(&HE), CByte(&HFE), CByte(&HFF)}, "SCSU")
-            SCSU_BOCU1 = New BOM({CByte(&HFB), CByte(&HEE), CByte(&H28)}, "SCSU")
-            SCSU_GB18030 = New BOM({CByte(&H84), CByte(&H31), CByte(&H95), CByte(&H33)}, "SCSU")
+            SCSU_BOCU1 = New BOM({CByte(&HFB), CByte(&HEE), CByte(&H28)}, "SCSU_BOCU1")
+            SCSU_GB18030 = New BOM({CByte(&H84), CByte(&H31), CByte(&H95), CByte(&H33)}, "SCSU_GB18030")
 
         End Sub
 
@@ -639,7 +641,7 @@ Namespace ByteOrderMark
             Return Type.ToString & " [" & s & "]"
         End Function
 
-        Public Overloads Function Encode(ByVal value As Byte()) As Byte()
+        Public Overloads Function Encode(value As Byte()) As Byte()
             Dim b() As Byte
 
             Dim d() As Byte
@@ -649,7 +651,7 @@ Namespace ByteOrderMark
 
             Select Case _Type
                 Case BOMTYPE.ASCII
-                    d = UnicodeEncoding.Convert(Encoding.Unicode, Encoding.ASCII, value)
+                    d = Encoding.Convert(Encoding.Unicode, Encoding.ASCII, value)
 
                 Case BOMTYPE.UTF16BE
                     d = Encoding.Convert(Encoding.Unicode, Encoding.BigEndianUnicode, value)
@@ -671,21 +673,17 @@ Namespace ByteOrderMark
             Return b
         End Function
 
-        Public Overloads Function Encode(ByVal value As String) As Byte()
-
-            Dim d() As Byte = UnicodeEncoding.Unicode.GetBytes(value)
-            d = Encode(d)
-            Return d
-
+        Public Overloads Function Encode(value As String) As Byte()
+            Return Encode(Encoding.Unicode.GetBytes(value))
         End Function
 
-        Public Overloads Shared Function Parse(ByVal value() As Byte) As BOM
+        Public Overloads Shared Function Parse(value() As Byte) As BOM
             Dim b As BOM
             Dim m As System.Reflection.MemberInfo()
             Dim mt As System.Reflection.MemberInfo
             Dim fi As System.Reflection.FieldInfo
             Dim by() As Byte
-            Dim i As Integer, _
+            Dim i As Integer,
                 c As Integer
 
             Dim y As Boolean = False
@@ -732,11 +730,11 @@ Namespace ByteOrderMark
         End Function
 
         Public Shared Widening Operator CType(operand As BOM) As String
-            Return ASCIIEncoding.ASCII.GetString(operand._BOM)
+            Return Encoding.ASCII.GetString(operand._BOM)
         End Operator
 
         Public Shared Narrowing Operator CType(operand As String) As BOM
-            Dim b As BOM = Parse(ASCIIEncoding.ASCII.GetBytes(operand))
+            Dim b As BOM = Parse(Encoding.ASCII.GetBytes(operand))
             Return b
         End Operator
 
@@ -1215,7 +1213,7 @@ Namespace ByteOrderMark
 
     Public Module CPGlobal
 
-        '        Public CodesPages As New CodePageCollection
+        Friend CodesPages As New CodePageCollection
         Friend Signals As New ControlSignals
 
         Friend signalInit As Boolean = False
@@ -1226,30 +1224,30 @@ Namespace ByteOrderMark
         Public Function SafeTextRead(b() As Byte) As String
 
             Dim bm As New BOM
-            Dim s As String = vbNullString
+            Dim s As String
 
             Dim bOut() As Byte = BOM.StripBOM(b, bm)
 
             Select Case bm.Type
 
                 Case BOMTYPE.UTF16LE
-                    s = UnicodeEncoding.Unicode.GetString(bOut)
+                    s = Encoding.Unicode.GetString(bOut)
 
                 Case BOMTYPE.UTF16BE
 
-                    s = UnicodeEncoding.BigEndianUnicode.GetString(bOut)
+                    s = Encoding.BigEndianUnicode.GetString(bOut)
 
                 Case BOMTYPE.UTF8
 
-                    s = UnicodeEncoding.UTF8.GetString(bOut)
+                    s = Encoding.UTF8.GetString(bOut)
 
                 Case BOMTYPE.UTF7a, BOMTYPE.UTF7b, BOMTYPE.UTF7c, BOMTYPE.UTF7d, BOMTYPE.UTF7e
 
-                    s = UnicodeEncoding.UTF7.GetString(bOut)
+                    s = Encoding.UTF7.GetString(bOut)
 
                 Case BOMTYPE.UTF32LE
 
-                    s = UnicodeEncoding.UTF32.GetString(bOut)
+                    s = Encoding.UTF32.GetString(bOut)
 
                 Case BOMTYPE.UTF32BE
 
@@ -1259,7 +1257,7 @@ Namespace ByteOrderMark
 
                 Case Else
 
-                    s = UTF8Encoding.UTF8.GetString(bOut)
+                    s = Encoding.UTF8.GetString(bOut)
 
             End Select
 
@@ -1275,34 +1273,33 @@ Namespace ByteOrderMark
 
             bm.Type = enc
 
-            Dim bOut() As Byte = Nothing
+            Dim bOut() As Byte
 
             Select Case bm.Type
 
                 Case BOMTYPE.UTF16LE
-                    bOut = UnicodeEncoding.Unicode.GetBytes(subject)
+                    bOut = Encoding.Unicode.GetBytes(subject)
 
                 Case BOMTYPE.UTF16BE
-                    bOut = UnicodeEncoding.BigEndianUnicode.GetBytes(subject)
+                    bOut = Encoding.BigEndianUnicode.GetBytes(subject)
 
                 Case BOMTYPE.UTF8
 
-                    bOut = UnicodeEncoding.UTF8.GetBytes(subject)
+                    bOut = Encoding.UTF8.GetBytes(subject)
 
                 Case BOMTYPE.UTF7a, BOMTYPE.UTF7b, BOMTYPE.UTF7c, BOMTYPE.UTF7d, BOMTYPE.UTF7e
-
-                    bOut = UnicodeEncoding.UTF7.GetBytes(subject)
+                    bOut = Encoding.UTF7.GetBytes(subject)
 
                 Case BOMTYPE.UTF32LE
 
-                    bOut = UnicodeEncoding.UTF32.GetBytes(subject)
+                    bOut = Encoding.UTF32.GetBytes(subject)
 
                 Case BOMTYPE.UTF32BE
-                    bOut = UnicodeEncoding.BigEndianUnicode.GetBytes(subject)
+                    bOut = Encoding.BigEndianUnicode.GetBytes(subject)
 
                 Case Else
 
-                    bOut = UTF8Encoding.UTF8.GetBytes(subject)
+                    bOut = Encoding.UTF8.GetBytes(subject)
 
             End Select
 
@@ -1310,6 +1307,8 @@ Namespace ByteOrderMark
 
             bl &= bOut
             bOut = bl
+
+            bl.Dispose()
 
             Return bOut
 
@@ -1657,7 +1656,7 @@ Namespace ByteOrderMark
             objCP.AddCode("Control|    |Eight Ones,EO|255")
 
             objCP.Name = "EBCDIC"
-            'CodesPages.Add(objCP)
+            CodesPages.Add(objCP)
 
         End Sub
 
