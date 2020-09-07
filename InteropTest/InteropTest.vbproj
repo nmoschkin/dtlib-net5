@@ -6,9 +6,15 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>InteropTest</RootNamespace>
-    <StartupObject>Sub Main</StartupObject>
-  </PropertyGroup>
-
+    <!--<StartupObject>Sub Main</StartupObject>-->
+	  <!-- Don't make ApplicationDefinition for me -->
+	  <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    </PropertyGroup>
+	<ItemGroup>
+	    <!-- This is my application definition - I should be able to call it whatever I want -->
+	    <ApplicationDefinition Include="Application.xaml" />
+	</ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualBasic" Version="10.4.0-preview.18571.3" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0-preview.8.20407.11" />

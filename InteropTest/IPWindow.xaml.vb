@@ -11,14 +11,14 @@ Public Class IPWindow
 
     Private _Adapters As AdaptersCollection
 
-    Public Shared Sub Main()
+    'Public Shared Sub Main()
 
-        System.Windows.Forms.Application.EnableVisualStyles()
+    '    System.Windows.Forms.Application.EnableVisualStyles()
 
-        Dim window As New IPWindow()
+    '    Dim window As New IPWindow()
 
-        window.ShowDialog()
-    End Sub
+    '    window.ShowDialog()
+    'End Sub
 
 
     Public Property FSWindow As FSMonTestWindow
