@@ -127,21 +127,24 @@ Public Class IPWindow
         'mm.Free()
 
         InitializeComponent()
+        WindowStartupLocation = WindowStartupLocation.CenterScreen
+        Title = "DataTools Interop Library Test Project"
 
-        Dim bthRadio = EnumBluetoothRadios()
+        'Dim bthRadio = EnumBluetoothRadios()
 
-        Dim bthDev = EnumBluetoothDevices()
+        'Dim bthDev = EnumBluetoothDevices()
 
         'BluetoothDeviceInfo.ShowBluetoothSettings()
 
-        Dim bl As SafePtr = System.Text.UTF8Encoding.UTF8.GetBytes("Hello World")
+        'Dim bl As SafePtr = System.Text.UTF8Encoding.UTF8.GetBytes("Hello World")
 
-        bl.ReAlloc(bl.Length + 2)
+        'bl.ReAlloc(bl.Length + 2)
 
 
         'Dim s As String = bl.GrabUtf8String(0)
 
         'bl.Free()
+
 
         'Dim bl As Blob
         'Blob.TryParseObject("0.94494943511338", bl)
@@ -178,17 +181,20 @@ Public Class IPWindow
 
     Private Sub ShowPrg_Click(sender As Object, e As RoutedEventArgs) Handles ShowPrg.Click
         ProgramsWindow = New Programs
+        ProgramsWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen
         ProgramsWindow.Show()
     End Sub
 
     Private Sub ShowHw_Click(sender As Object, e As RoutedEventArgs) Handles ShowHw.Click
         HardwareWindow = New Hardware
+        HardwareWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen
         HardwareWindow.Show()
     End Sub
 
 
     Private Sub ShowFS_Click(sender As Object, e As RoutedEventArgs) Handles ShowFS.Click
         FSWindow = New FSMonTestWindow
+        FSWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen
         FSWindow.Show()
     End Sub
 
@@ -200,6 +206,7 @@ Public Class IPWindow
 
     Private Sub ShowHID_Click(sender As Object, e As RoutedEventArgs) Handles ShowHID.Click
         CodeEx = New CodeExplorer()
+        CodeEx.WindowStartupLocation = WindowStartupLocation.CenterScreen
         CodeEx.Show()
     End Sub
 
