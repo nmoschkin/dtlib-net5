@@ -128,8 +128,6 @@ Public Class IPWindow
 
         InitializeComponent()
 
-        _props.RightToLeft = Forms.RightToLeft.No
-
         Dim bthRadio = EnumBluetoothRadios()
 
         Dim bthDev = EnumBluetoothDevices()
@@ -166,11 +164,11 @@ Public Class IPWindow
 
     Private Sub AdapterList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles AdapterList.SelectionChanged
 
-        Dim wr As NetworkAdapter = AdapterList.SelectedItem
+        'Dim wr As NetworkAdapter = AdapterList.SelectedItem
 
-        If wr IsNot Nothing Then
-            _props.SelectedObject = wr
-        End If
+        'If wr IsNot Nothing Then
+        '    _props.SelectedObject = wr
+        'End If
 
     End Sub
 
