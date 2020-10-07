@@ -10,3 +10,4 @@ Imports System.Runtime.CompilerServices
 <Assembly: InternalsVisibleTo("DTInterop", AllInternalsVisible:=True)>
 <Assembly: InternalsVisibleTo("DTMath", AllInternalsVisible:=True)>
 
+<Assembly: InternalsVisibleTo("MMAppHook", AllInternalsVisible:=True)>

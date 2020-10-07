@@ -2838,6 +2838,11 @@ Namespace Memory
 
         End Function
 
+        Public Function AllocCoTaskMem(size As Integer) As Boolean
+            _ptr = Marshal.AllocCoTaskMem(size)
+            Return _ptr <> 0
+        End Function
+
         ''' <summary>
         ''' Allocate a block of memory on the process heap.  
         ''' </summary>
